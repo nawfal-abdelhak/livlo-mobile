@@ -97,16 +97,12 @@ const App = () => {
             
            
             <Stack.Navigator headerMode='none'>
-                
-
-                <Stack.Screen name="Dragg" component={Dragg} />
-
+               <Stack.Screen name="Dragg" component={Dragg} />
+                 <Stack.Screen name="Signin" component={Signin} />
                <Stack.Screen name="Intro" component={Intro} />
-              <Stack.Screen name="Intro1" component={Intro1} />           
-              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen name="Intro1" component={Intro1} />                     
               <Stack.Screen name="Signup" component={Signup} />
-              </Stack.Navigator>
-            
+              </Stack.Navigator>        
           }
        
       </NavigationContainer>

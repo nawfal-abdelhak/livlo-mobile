@@ -4,31 +4,23 @@ import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity,Dim
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-import MapView from 'react-native-maps';
+import MapView,{Marker}from 'react-native-maps';
 
 import * as Location from 'expo-location';
+
+const marker_img = require('../../assets/locate1.png');
 
 const MapAdrr = ({ navigation }) => {
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [map, setmap] = useState(null);
+  
+ 
 
-  const [currentLocation, setCurrent] = useState(null);
+  // useEffect(() => {
 
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      console.log(location)
-    })();
-  }, []);
+  // }, []);
 
   // let text = 'Waiting..';
   // if (errorMsg) {
@@ -41,17 +33,54 @@ const MapAdrr = ({ navigation }) => {
     
   // }
 
+  const getloc= () =>{
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+      map.animateToCoordinate({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      },
+      2000
+      )
+
+      console.log(location)
+    })();
+
+  }
+
   return (
     <View style={styles.container}>
       <MapView
+
+       ref={map => { setmap(map) }}
       style={styles.map}
     initialRegion={{
-      latitude: 37.78825,
-      longitude: -122.4324,
+      latitude: 33.995176,
+      longitude: -6.848536,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
+      
     }}
-  />
+
+    onMapReady={getloc}
+  >
+
+<Marker style={styles.marker} coordinate={{ latitude : 33.995176 , longitude : -6.848536 }}
+   image={marker_img} 
+/>
+  
+    
+    </MapView>
+
+   
     </View>
   );
 
@@ -72,6 +101,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
       },
+      marker:{
+       
+      }
 })
 
 export default MapAdrr;
