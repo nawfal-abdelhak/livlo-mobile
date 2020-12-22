@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
 
     IntroView:{
-        marginTop:hp('4%'),
+        marginTop:hp('2%'),
        
     },
 
