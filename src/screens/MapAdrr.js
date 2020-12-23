@@ -15,6 +15,7 @@ const MapAdrr = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [map, setmap] = useState(null);
+  const [marker, setmarker] = useState(null);
   
  
 
@@ -32,6 +33,11 @@ const MapAdrr = ({ navigation }) => {
     
     
   // }
+   const saveLocation =() =>{
+     console.log(marker)
+   }
+
+
 
   const getloc= () =>{
     (async () => {
@@ -71,14 +77,28 @@ const MapAdrr = ({ navigation }) => {
     }}
 
     onMapReady={getloc}
-  >
 
-<Marker style={styles.marker} coordinate={{ latitude : 33.995176 , longitude : -6.848536 }}
-   image={marker_img} 
-/>
+    onPress={(e) => setmarker( e.nativeEvent.coordinate )}>
+{
+      marker &&
+      <Marker image={marker_img} draggable coordinate={marker} />
+}
+  
+
+
   
     
     </MapView>
+
+    <View
+        style={{
+            position: 'absolute',//use absolute position to show button on top of the map
+            top: '50%', //for center align
+            alignSelf: 'flex-end' //for align to right
+        }}
+    >
+        <Button  title="confirm location" onPress={() => saveLocation()}/>
+    </View>
 
    
     </View>
