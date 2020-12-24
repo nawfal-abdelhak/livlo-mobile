@@ -16,6 +16,8 @@ const MapAdrr = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [map, setmap] = useState(null);
   const [marker, setmarker] = useState(null);
+
+  const [display, setdisplay] = useState(true);
   
  
 
@@ -90,15 +92,41 @@ const MapAdrr = ({ navigation }) => {
     
     </MapView>
 
+   
+  
+  {
+    display ?
     <View
         style={{
             position: 'absolute',//use absolute position to show button on top of the map
-            top: '50%', //for center align
-            alignSelf: 'flex-end' //for align to right
+            top: '10%', //for center align
+            alignSelf: 'center' ,//for align to right
+            backgroundColor:'#cccccc',
+            height:150,
+            width:300,
+            borderRadius:20
+
         }}
     >
-        <Button  title="confirm location" onPress={() => saveLocation()}/>
+        <Text style={{
+        fontSize: hp('2.5%'),
+        marginBottom:hp('2.5%'),
+        marginTop:hp('2.5%'),
+        textAlign:'center'
+    }}> just press anywhere to display marker to select ur position with it </Text>
+        <Button  title="i got it" onPress={() => setdisplay(false)}/>
     </View>
+    :
+    <View
+    style={{
+        position: 'absolute',//use absolute position to show button on top of the map
+        top: '50%', //for center align
+        alignSelf: 'flex-end' //for align to right
+    }}
+>
+    <Button  title="confirm location" onPress={() => saveLocation()}/>
+</View>
+}
 
    
     </View>

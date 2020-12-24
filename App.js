@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ImageBackground, TextInput, Text, ActivityIndicator , StyleSheet, View, Dimensions,ScrollView } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
-import HomeScreen from "./src/screens/HomeScreen";
+import HomeScreenn from "./src/screens/HomeScreen";
 import AdminContent from "./src/screens/AdminContent";
 import {UserContentStackScreen,HomeStackScreen} from "./src/screens/HomeUser";
 import UserContent from "./src/screens/UserContent";
@@ -14,7 +14,7 @@ import  DrawerContent  from './src/screens/DrawerContent';
 import PhoneScreen from "./src/screens/PhoneScreen";
 import Intro from "./src/screens/Intro";
 import Intro1 from "./src/screens/Intro1";
-
+import LottieView from 'lottie-react-native';
 import Dragg from "./src/screens/DraggView";
 
 
@@ -24,7 +24,7 @@ import Signup from "./src/screens/Signup";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 const Drawer = createDrawerNavigator();
 
-
+// const image1 = require('./assets/29299-food-loading-animation.json');
 
 const Stack = createStackNavigator();
 
@@ -36,26 +36,32 @@ const App = () => {
 
   useEffect(() => {
 
-    
-    AsyncStorage.getItem('user').then((data) => {
+    setTimeout(async() => {
+      AsyncStorage.getItem('user').then((data) => {
 
-      setloading(false);
-
-      console.log('qsqsfqsf'+isLoading )
-
-      if (!data) return;
-
-      let user = JSON.parse(data)
-      setUser(user);
-      console.log('App', _user);
-    });
+        setloading(false);
+  
+        console.log('qsqsfqsf'+isLoading )
+  
+        if (!data) return;
+  
+        let user = JSON.parse(data)
+        setUser(user);
+        console.log('App', _user);
+      });
+    }, 2500);
+   
   }, []);
 
 
   if( isLoading ) {
       return(
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-          <Text>loading...</Text>
+          <LottieView
+          
+          source={require('./assets/29299-food-loading-animation.json')}
+          autoPlay loop
+        />
         </View>
       );
     }
@@ -97,9 +103,11 @@ const App = () => {
             
            
             <Stack.Navigator headerMode='none'>
+              
+              <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
                <Stack.Screen name="Dragg" component={Dragg} />
-                 <Stack.Screen name="Signin" component={Signin} />
-               <Stack.Screen name="Intro" component={Intro} />
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen name="Intro" component={Intro} />
               <Stack.Screen name="Intro1" component={Intro1} />                     
               <Stack.Screen name="Signup" component={Signup} />
               </Stack.Navigator>        

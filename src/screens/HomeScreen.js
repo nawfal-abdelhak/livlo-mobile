@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import AsyncStorage from '@react-native-community/async-storage';
-import { ImageBackground, TextInput, Text, Image, StyleSheet, View, Dimensions, RefreshControl,FlatList,ScrollView } from "react-native";
+import { TouchableOpacity, TextInput, Text, Image, Button, StyleSheet, View, Dimensions, RefreshControl, FlatList, ScrollView } from "react-native";
 import { UserContext } from '../../src/contexts/index';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Avatar } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const { height } = Dimensions.get('window');
 
 const wait = (timeout) => {
@@ -28,81 +29,121 @@ const HomeScreen = ({ navigation }) => {
   const BurgerKing = require('../../assets/BurgerKing.png');
   const Pizza = require('../../assets/Pizza.png');
   const burger = require('../../assets/burger.png');
-  const DATA = [
+
+  const [totalprice, settotalprice] = useState(0)
+  const [DATA, setDATA] = useState([
     {
       id: '1',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/Mcdoi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/Mcdoi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
     {
       id: '2',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 40,
+      quantity: 0
     },
     {
       id: '3',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/Mcdoi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/Mcdoi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 50,
+      quantity: 0
     },
     {
       id: '4',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
     {
       id: '5',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/Mcdoi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/Mcdoi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
     {
       id: '6',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
 
     {
       id: '7',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
     {
       id: '8',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
     {
       id: '9',
       name: 'Double cheese burger',
-      image:require('../../assets/Doublecheese.png'),
-      restaurant:require('../../assets/BurgerKingi.png'),
+      image: require('../../assets/Doublecheese.png'),
+      restaurant: require('../../assets/BurgerKingi.png'),
       description: 'burger + fries meduim',
-      price:'30.00 Mad'
+      price: 30,
+      quantity: 0
     },
-  ];
+  ])
+
+ const minusqua= (index)=>{
+  for (let i=0;i<DATA.length ;i++){
+    if(DATA[i].id==index+1 && DATA[i].quantity>0 ){
+    console.log(DATA[i].quantity);
+    DATA[i].quantity=DATA[i].quantity-1;
+    settotalprice(totalprice-DATA[i].price)
+    }
+
+  }
+}
+
+  const addqua= (index)=>{
+    for (let i=0;i<DATA.length ;i++){
+      if(DATA[i].id==index+1){
+      
+      DATA[i].quantity=DATA[i].quantity+1;
+      console.log(DATA[i]);
+      settotalprice(totalprice+DATA[i].price)
+      }
+  
+    }
+  }
+
+  
+  
+
+ 
+
 
 
   return (
@@ -112,9 +153,9 @@ const HomeScreen = ({ navigation }) => {
     </Text>
 
       <View style={styles.block}>
-   
+
         <Avatar.Image
-        
+
           source={Mcdo}
           size={60}
         />
@@ -127,11 +168,11 @@ const HomeScreen = ({ navigation }) => {
           size={60}
         />
         <Avatar.Image
-        
+
           source={KFC}
           size={60}
         />
-        
+
       </View>
 
 
@@ -140,7 +181,7 @@ const HomeScreen = ({ navigation }) => {
       </Text>
 
 
-    {/* <FlatList 
+      {/* <FlatList 
         horizontal={true}
          showsHorizontalScrollIndicator={false}
         data={DATA}
@@ -168,53 +209,106 @@ const HomeScreen = ({ navigation }) => {
 
      /> */}
 
-<ScrollView
-       showsVerticalScrollIndicator={false}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
 
-<FlatList 
-        
-        data={DATA}
-        renderItem={({item,index}) =>{
-          return ( 
-            
-          <View  style={[styles.text, (index % 2)?  styles.flat11 : styles.flat22]} >
-            <View style={styles.group}>
-            
-            <Avatar.Image
-             style={{marginRight:'5%',marginLeft:'3%'}}
-        
-           source={burger}
-           size={60}
-                />
-                <View  style={styles.items}>
-           <Text  style={styles.name1}>{item.name}  </Text>
+        <FlatList
 
-           <Text  style={styles.description1}>{item.description} </Text>
-           <View  style={{flexDirection:'row'}}>
-           <Text  style={styles.price1}>{item.price} </Text>
-           <Text  style={styles.quantity}>- 1 + </Text>
-           
+          data={DATA}
+          renderItem={({ item, index }) => {
+            return (
 
-           </View>
-        
-           </View>
+              <View style={[styles.text, (index % 2) ? styles.flat11 : styles.flat22]} >
+                <View style={styles.group}>
 
-           </View>
-           </View>
-           
-  ) 
-          
-        }
+                  <Avatar.Image
+                    style={{ marginRight: '5%', marginLeft: '3%' }}
+
+                    source={burger}
+                    size={60}
+                  />
+                  <View style={styles.items}>
+                    <Text style={styles.name1}>{item.name}  </Text>
+
+                    <Text style={styles.description1}>{item.description} </Text>
+
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text style={styles.price1}>{item.price}.00 Mad </Text>
+
+                      <View style={styles.quantity}>
+
+                      <TouchableOpacity  onPress={() => minusqua(index) }>
+                        <Icon
+                          name="minus-circle"
+                           color={'white'}
+                          size={25}
+                        />
+                        </TouchableOpacity >
+                        <Text style={{fontSize:hp('3%')}} >  {item.quantity}  </Text>
+                        <TouchableOpacity  onPress={() => addqua(index) }>
+                        <Icon
+                          name="plus-circle"
+                          color={'white'}
+                          size={25}
+                        />
+                        </TouchableOpacity>
+                        
+                      </View>
+
+                    </View>
+
+                  </View>
+
+                </View>
+              </View>
+
+            )
+
+          }
+          }
+
+
+        />
+
+
+
+
+
+      </ScrollView>
+
+      {totalprice>0?
+
+      <View
+        style={{
+          position: 'absolute',//use absolute position to show button on top of the map
+          top: '68%', //for center align
+          alignSelf: 'center', //for align to right
+          backgroundColor: '#DF5B73',
+          width: wp('70%'),
+          height: hp('6%'),
+          borderRadius: 30,
+          elevation:8,
+          shadowOffset: { width: 5, height: 5 },
+          shadowColor: "#4d4d4d",
+          shadowOpacity: 0.5,
+          shadowRadius: 10,
+        }}
+      >
+        <TouchableOpacity>
+          <Text style={{
+            fontSize: hp('3%'),
+            color: 'white',
+            marginLeft: 10,
+            marginTop: hp('0.5%'),
+          }} >commander pour {totalprice} MAD</Text>
+        </TouchableOpacity>
+      </View>
+      :
+      <View></View>
       }
-          
-
-     />
-
-    </ScrollView>
-
 
 
     </View>
@@ -223,9 +317,11 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  
+
   bigtitle: {
     fontSize: hp('4%'),
+    marginTop: hp('1.5%'),
+    marginLeft:hp('2%')
 
   },
 
@@ -235,131 +331,132 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3A990',
     width: '100%',
     flexDirection: 'row',
-    justifyContent:'space-around',
-    alignItems:'center'
-     
+    justifyContent: 'space-around',
+    alignItems: 'center'
+
   },
 
-  secondtitle:{
+  secondtitle: {
     marginTop: hp('3%'),
     fontSize: hp('4%'),
-    marginLeft:'3%'
+    marginLeft: '3%'
   },
-  flat1:{
+  flat1: {
     marginTop: hp('4%'),
-    backgroundColor:'#DF5B73' ,
-    borderRadius:15,
-    marginLeft:10,
-    marginRight:15,
+    backgroundColor: '#DF5B73',
+    borderRadius: 15,
+    marginLeft: 10,
+    marginRight: 15,
     height: hp('40%'),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
-    shadowRadius: 2,  
-    elevation: 5 
+    shadowRadius: 2,
+    elevation: 5
   },
 
-  flat2:{
+  flat2: {
     marginTop: hp('4%'),
-    backgroundColor:'#F3A990' ,
-    borderRadius:15,
-    marginLeft:10,
-    marginRight:15,
+    backgroundColor: '#F3A990',
+    borderRadius: 15,
+    marginLeft: 10,
+    marginRight: 15,
     height: hp('40%'),
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.4,
+    shadowOpacity: 0.4,
     shadowRadius: 3,
-    elevation: 5 
+    elevation: 5
   },
-   
-  name:{
-    
+
+  name: {
+
     marginTop: hp('4%'),
-    marginLeft:10,
+    marginLeft: 10,
     fontSize: hp('3%'),
   },
 
-  description:{
+  description: {
     fontSize: hp('2%'),
-    marginLeft:10,
+    marginLeft: 10,
   },
 
 
-  price:{
-    marginLeft:100,
+  price: {
+    marginLeft: 100,
     fontSize: hp('4%'),
-    marginBottom:-hp('4%'),
+    marginBottom: -hp('4%'),
   },
-  restaurant:{
-    marginLeft:10,
-  
+  restaurant: {
+    marginLeft: 10,
+
   },
 
 
 
   // flatlist2
 
-  flat11:{
+  flat11: {
     marginTop: hp('3%'),
-    backgroundColor:'#F3A990' ,
-    borderRadius:15,
-    marginLeft:7,
-    marginRight:7,
+    backgroundColor: '#F3A990',
+    borderRadius: 15,
+    marginLeft: 7,
+    marginRight: 7,
     height: hp('14%'),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
-    shadowRadius: 2,  
-    elevation: 5 
+    shadowRadius: 2,
+    elevation: 5
   },
 
 
-  flat22:{
+  flat22: {
     marginTop: hp('3%'),
-    backgroundColor:'#DF5B73' ,
-    
-    borderRadius:15,
-    marginLeft:7,
-    marginRight:7,
+    backgroundColor: '#DF5B73',
+
+    borderRadius: 15,
+    marginLeft: 7,
+    marginRight: 7,
     height: hp('14%'),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
-    shadowRadius: 2,  
-    elevation: 5 ,
-    
+    shadowRadius: 2,
+    elevation: 5,
+
   },
 
-  group:{
-    flexDirection:'row',
+  group: {
+    flexDirection: 'row',
     marginTop: hp('1.5%'),
-    
-  
+
+
 
   },
 
-  items:{
-    flexDirection:'column',
-    
+  items: {
+    flexDirection: 'column',
+
 
   },
 
-  name1:{
+  name1: {
     fontSize: hp('3%'),
   },
 
-  description1:{
+  description1: {
 
   },
 
-  price1:{
+  price1: {
     fontSize: hp('3%'),
-    marginRight:'40%'
+    marginRight: '25%'
   },
 
-  quantity:{
- marginTop:hp('1%'),
+  quantity: {
+    marginTop: hp('1%'),
+    flexDirection: 'row'
   }
 
 
@@ -367,7 +464,7 @@ const styles = StyleSheet.create({
 
 
 
-  
+
 
 });
 
