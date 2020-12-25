@@ -151,24 +151,27 @@ const HomeScreen = ({ navigation }) => {
       <Text style={styles.bigtitle} >
         Choose your favorite Restaurant
     </Text>
-
+    
       <View style={styles.block}>
-
+      <TouchableOpacity onPress={() =>navigation.navigate('Profile')}  >
         <Avatar.Image
-
+          
           source={Mcdo}
           size={60}
         />
-        <Avatar.Image
+        </TouchableOpacity>
+        <Avatar.Image 
+        style={{opacity:0.1}}
           source={BurgerKing}
           size={60}
         />
         <Avatar.Image
+          style={{opacity:0.1}}
           source={Pizza}
           size={60}
         />
         <Avatar.Image
-
+          style={{opacity:0.1}}
           source={KFC}
           size={60}
         />
@@ -284,10 +287,10 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           position: 'absolute',//use absolute position to show button on top of the map
-          top: '68%', //for center align
+          top: '66%', //for center align
           alignSelf: 'center', //for align to right
           backgroundColor: '#DF5B73',
-          width: wp('70%'),
+          width: wp('80%'),
           height: hp('6%'),
           borderRadius: 30,
           elevation:8,
@@ -299,10 +302,11 @@ const HomeScreen = ({ navigation }) => {
       >
         <TouchableOpacity>
           <Text style={{
-            fontSize: hp('3%'),
+            
+            fontSize: hp('2.5%'),
             color: 'white',
-            marginLeft: 10,
-            marginTop: hp('0.5%'),
+            alignSelf:'center',
+            marginTop: hp('1%'),
           }} >commander pour {totalprice} MAD</Text>
         </TouchableOpacity>
       </View>

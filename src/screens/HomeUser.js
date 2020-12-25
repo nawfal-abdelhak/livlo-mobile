@@ -1,6 +1,6 @@
 import React from 'react';
 import HomeScreen from './HomeScreen';
-import UserContentT from './UserContent';
+import Profile from './Profile';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -38,7 +38,7 @@ export const HomeStackScreen = ({navigation}) => (
             fontWeight: 'bold'
             }
         }}>
-            <UserContent.Screen name="Details" component={UserContentT} options={{
+            <UserContent.Screen name="Profile" component={Profile} options={{
             headerLeft: () => (
                 <Icon.Button name="ios-menu" size={25} backgroundColor="#F2A38D" onPress={() => navigation.openDrawer()}></Icon.Button>
             )

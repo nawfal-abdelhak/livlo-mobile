@@ -7,12 +7,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import HomeScreenn from "./src/screens/HomeScreen";
 import AdminContent from "./src/screens/AdminContent";
 import {UserContentStackScreen,HomeStackScreen} from "./src/screens/HomeUser";
-import UserContent from "./src/screens/UserContent";
+
 import { UserContext } from './src/contexts/index';
 import  DrawerContent  from './src/screens/DrawerContent';
 // import RootStackScreen from './src/screens/Rootstack';
 import PhoneScreen from "./src/screens/PhoneScreen";
 import Intro from "./src/screens/Intro";
+import adresse from "./src/screens/MapAdrr";
 import Intro1 from "./src/screens/Intro1";
 import LottieView from 'lottie-react-native';
 import Dragg from "./src/screens/DraggView";
@@ -80,15 +81,20 @@ const App = () => {
                     </Stack.Navigator>
                   
                   : _user.roles.includes('ROLE_USER') ?
+
+                  <Stack.Navigator headerMode='none'>
+              
+                  <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
+                  <Stack.Screen name="Dragg" component={Dragg} />
+                  <Stack.Screen name="Signin" component={Signin} />
+                  <Stack.Screen name="Intro" component={Intro} />
+                  <Stack.Screen name="Intro1" component={Intro1} />                     
+                  <Stack.Screen name="Signup" component={Signup} />
+                  </Stack.Navigator>   
                     
                       /* <Stack.Screen name="UserContent" component={UserContent} /> */
                       
-                      <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
-                        {/* <Drawer.Screen name="PhoneScreen" component={PhoneScreen} /> */}
-                        <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
-                        <Drawer.Screen name="UserContent" component={UserContent} />
-                      </Drawer.Navigator>
-                    
+                      
                     :
                     
                       /* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */
@@ -100,17 +106,15 @@ const App = () => {
             </>
             :
 
-            
+            <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
+                        
+                        <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
+                        <Drawer.Screen name="Profile" component={UserContentStackScreen} />
+                        <Drawer.Screen name="adresse" component={adresse} />
+                      </Drawer.Navigator>
+                    
            
-            <Stack.Navigator headerMode='none'>
-              
-              <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
-               <Stack.Screen name="Dragg" component={Dragg} />
-              <Stack.Screen name="Signin" component={Signin} />
-              <Stack.Screen name="Intro" component={Intro} />
-              <Stack.Screen name="Intro1" component={Intro1} />                     
-              <Stack.Screen name="Signup" component={Signup} />
-              </Stack.Navigator>        
+                
           }
        
       </NavigationContainer>

@@ -44,7 +44,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
                                 size={50}
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={styles.title}> { _user.username }</Title>
+                                <Title style={styles.title}>  nawfal </Title>
                                 <Caption style={styles.caption}>060261421</Caption>
                             </View>
                         </View>
@@ -72,19 +72,19 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
                                 size={size}
                                 />
                             )}
-                            label="Profile"
-                            onPress={() => {props.navigation.navigate('UserContent')}}
+                            label="Usercontent"
+                            onPress={() => {props.navigation.navigate('Profile')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="bookmark-outline" 
+                                name="map-marker" 
                                 color={color}
                                 size={size}
                                 />
                             )}
-                            label="Bookmarks"
-                            onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                            label="default-adresse"
+                            onPress={() => {props.navigation.navigate('adresse')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
