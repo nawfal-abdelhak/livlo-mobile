@@ -82,15 +82,12 @@ const App = () => {
                   
                   : _user.roles.includes('ROLE_USER') ?
 
-                  <Stack.Navigator headerMode='none'>
-              
-                  <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
-                  <Stack.Screen name="Dragg" component={Dragg} />
-                  <Stack.Screen name="Signin" component={Signin} />
-                  <Stack.Screen name="Intro" component={Intro} />
-                  <Stack.Screen name="Intro1" component={Intro1} />                     
-                  <Stack.Screen name="Signup" component={Signup} />
-                  </Stack.Navigator>   
+                  <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
+                        
+                  <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
+                  <Drawer.Screen name="Profile" component={UserContentStackScreen} />
+                  <Drawer.Screen name="adresse" component={adresse} />
+                </Drawer.Navigator>
                     
                       /* <Stack.Screen name="UserContent" component={UserContent} /> */
                       
@@ -105,13 +102,17 @@ const App = () => {
               }
             </>
             :
+            <Stack.Navigator headerMode='none'>
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
+            <Stack.Screen name="Dragg" component={Dragg} />
+            <Stack.Screen name="Signin" component={Signin} />
+            <Stack.Screen name="Intro" component={Intro} />
+            <Stack.Screen name="Intro1" component={Intro1} />                     
+           
+            </Stack.Navigator>   
 
-            <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
-                        
-                        <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
-                        <Drawer.Screen name="Profile" component={UserContentStackScreen} />
-                        <Drawer.Screen name="adresse" component={adresse} />
-                      </Drawer.Navigator>
+            
                     
            
                 

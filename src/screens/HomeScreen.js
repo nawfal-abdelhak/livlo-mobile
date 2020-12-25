@@ -218,6 +218,8 @@ const HomeScreen = ({ navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
 
+         
+
         <FlatList
 
           data={DATA}
