@@ -63,6 +63,8 @@ const App = () => {
           source={require('./assets/29299-food-loading-animation.json')}
           autoPlay loop
         />
+        
+        
         </View>
       );
     }
@@ -75,12 +77,12 @@ const App = () => {
           {_user ?
             <>
               {
-                _user.roles.includes('ROLE_ADMIN') ?
+                _user.roles.includes('COURIER') ?
                   <Stack.Navigator headerMode='none'>
                     <Stack.Screen name="AdminContent" component={AdminContent} />
                     </Stack.Navigator>
                   
-                  : _user.roles.includes('ROLE_USER') ?
+                  : _user.roles.includes('CLIENT') ?
 
                   <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
                         
@@ -94,19 +96,19 @@ const App = () => {
                       
                     :
                     
-                      /* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */
-                      <Stack.Navigator headerMode='none'>
-                      <Stack.Screen name="ModContent" component={ModContent} />
-                      </Stack.Navigator>
+                     null
                     
               }
             </>
             :
             <Stack.Navigator headerMode='none'>
-            <Stack.Screen name="Signup" component={Signup} />
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen name="Signup" component={Signup} />
+              
+ 
             <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
             <Stack.Screen name="Dragg" component={Dragg} />
-            <Stack.Screen name="Signin" component={Signin} />
+            
             <Stack.Screen name="Intro" component={Intro} />
             <Stack.Screen name="Intro1" component={Intro1} />                     
            

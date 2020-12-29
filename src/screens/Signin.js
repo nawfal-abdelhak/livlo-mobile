@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Springapi from '../../src/api/Springapi';
 import { ImageBackground, TextInput, Button, Text, Image, StyleSheet, View, Dimensions, ScrollView, TouchableOpacity, Platform } from "react-native";
-
+import axios from 'axios';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import { UserContext } from '../../src/contexts/index';
@@ -55,7 +55,36 @@ const CELL_COUNT = 6;
 
 
 const Signin = ({ navigation }) => {
+	const saveUser = () => {
+		console.log(phoneNumber + "sss");
+		// kansift num direct pour test
+		let body = { "phone": "+212602611422" };
+		Springapi.post('Auth/signIn',  body )
+			.then((response) => {
 
+				console.log(response.data);
+				let user = response.data;
+				AsyncStorage.setItem('user', JSON.stringify(user));
+				setUser(user);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	// 	console.log("ss")
+  
+	// 	let body = { "username":"client",     
+    // "password":"123456" };
+	// 	Springapi.post('api/auth/signin',  body )
+	// 		.then((response) => {
+
+	// 			console.log(response.data);
+				
+	// 		})
+	// 		.catch(function (error) {
+	// 			console.log(error);
+	// 		});
+	
+	};
 
 
 	const [screen, setScreen] = React.useState(true);
@@ -69,7 +98,7 @@ const Signin = ({ navigation }) => {
 	});
 
 	const recaptchaVerifier = React.useRef(null);
-	const [phoneNumber, setPhoneNumber] = React.useState();
+	const [phoneNumber, setPhoneNumber] = React.useState(''); //phonenumber
 	const [verificationId, setVerificationId] = React.useState();
 
 	const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
@@ -87,33 +116,9 @@ const Signin = ({ navigation }) => {
 
 	const { setUser } = useContext(UserContext);
 
-	const [data, setData] = React.useState({
-		username: '',
-		password: '',
-	});
 
-	const test = () => {
 
-		console.log('qsd')
-		setScreen(false);
-	}
 
-	const saveUser = (user) => {
-		console.log(user)
-
-		Springapi.post('api/auth/signin', {
-			"username": user.username,
-			"password": user.password,
-		})
-			.then((response) => {
-				let user = response.data;
-				AsyncStorage.setItem('user', JSON.stringify(user));
-				setUser(user);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	};
 
 
 	return <View style={styles.container} >
@@ -149,41 +154,11 @@ const Signin = ({ navigation }) => {
 							keyboardType="phone-pad"
 							textContentType="telephoneNumber"
 							onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
-						// onChangeText={data1 => setData({
-						// 	...data,
-						// 	username: data1
-						// })}
+
 						/>
 					</View >
 
-					{/* <View style={styles.view}>
-							<Text style={styles.numberp}> password</Text>
-
-							<TextInput
-
-								style={styles.inputnumber}
-
-								onChangeText={data1 => setData({
-									...data,
-									password: data1
-								})}
-							/>
-						</View> */}
-
-
-
-
-					{/* <TouchableOpacity style={styles.image1view} onPress={() => saveUser(data)}>
-							<Image style={styles.image1} source={image1} />
-						</TouchableOpacity> */}
-
-
-					<View style={styles.viewtext}>
-						<Text style={styles.viewtext1} > not signin ? </Text>
-						<Text onPress={() => navigation.navigate('Signup')} style={styles.viewtext2} >Sign up</Text>
-					</View>
-
-					<Button title="nav" onPress={async () => {
+					{/* onPress={async () => {
 						// The FirebaseRecaptchaVerifierModal ref implements the
 						// FirebaseAuthApplicationVerifier interface and can be
 						// passed directly to `verifyPhoneNumber`.
@@ -202,35 +177,40 @@ const Signin = ({ navigation }) => {
 						} catch (err) {
 							showMessage({ text: `Error: ${err.message}`, color: 'red' });
 						}
-					}} />
+					}} */}
+
+					<TouchableOpacity style={styles.image1} onPress={() => saveUser()} >
+						<Image source={image1} />
+
+					</TouchableOpacity>
+
+
+
+					<View style={styles.viewtext}>
+						<Text style={styles.viewtext1} > not signin ? </Text>
+						<Text onPress={() => navigation.navigate('Signup')} style={styles.viewtext2} >Sign up</Text>
+					</View>
+
+
+
+
+
 
 				</ScrollView>
 
-
-
 			</ImageBackground>
-
-
-
-
 
 			:
 
 			<LinearGradient
 				colors={['#F3A78E', '#DF5B73']}
 				style={styles.screen2}>
-<ScrollView style={styles.scrollView}   showsVerticalScrollIndicator={false}>
-				<View style={{ padding: 20, marginTop: 15 }}>
-					<Image style={styles.pass_image} source={password} />
+				<ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+					<View style={{ padding: 20, marginTop: 15 }}>
+						<Image style={styles.pass_image} source={password} />
 
-					<Text style={styles.textverif} onPress={() => { setScreen(true) }} > please enter  </Text>
-					<Text style={styles.textverif} onPress={() => { setScreen(true) }} > the verfication code </Text>
-
-
-
-
-					
-
+						<Text style={styles.textverif}  > please enter  </Text>
+						<Text style={styles.textverif} > the verfication code </Text>
 
 
 						<CodeField
@@ -251,16 +231,16 @@ const Signin = ({ navigation }) => {
 								</Text>
 							)}
 						/>
-                          <View style={styles.containView}>
-						<Text  style={styles.text1}>Didn't recieve code ? </Text>
-						<Text  style={styles.text2}>Request again </Text>
+						<View style={styles.containView}>
+							<Text style={styles.text1}>Didn't recieve code ? </Text>
+							<Text style={styles.text2}>Request again </Text>
 						</View>
-						
+
 
 
 						<Button
-						 color="#F3A78E"
-						 borderRadius="10"
+							color="#F3A78E"
+							borderRadius="10"
 							title="Confirm Verification Code"
 							// disabled={!verificationId}
 							style={styles.buttonVerif}
@@ -271,7 +251,12 @@ const Signin = ({ navigation }) => {
 										value
 									);
 									await firebase.auth().signInWithCredential(credential);
-									showMessage({ text: 'Phone authentication successful 👍' });
+									console.log('ss');
+									showMessage({ text: 'Phone authentication successful 👍', })
+									saveUser();
+
+
+
 								} catch (err) {
 									showMessage({ text: `Error: ${err.message}`, color: 'red' });
 								}
@@ -299,11 +284,11 @@ const Signin = ({ navigation }) => {
 								undefined
 							)}
 						{attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
-					
-				</View>
+
+					</View>
 				</ScrollView>
 			</LinearGradient>
-			
+
 
 		}
 	</View>
@@ -358,6 +343,7 @@ const styles = StyleSheet.create({
 		color: "white",
 
 		fontSize: hp('2.5%'),
+		marginTop: hp('4%'),
 
 	},
 
@@ -368,14 +354,13 @@ const styles = StyleSheet.create({
 		borderBottomColor: 'white',
 		borderBottomWidth: 1,
 	},
-	image1view: {
-		alignSelf: 'center',
-		marginTop: height * 0.03,
-		marginRight: '2%',
-		width: wp('20%'),
-	},
+
 
 	image1: {
+		alignSelf: 'center',
+		marginTop: hp('4%'),
+
+		width: wp('20%'),
 
 
 
@@ -444,31 +429,31 @@ const styles = StyleSheet.create({
 		fontSize: hp('4%'),
 	},
 
-	containView:{
+	containView: {
 		marginTop: hp('9%'),
-	 flexDirection:'row',
-	 justifyContent: 'center',
+		flexDirection: 'row',
+		justifyContent: 'center',
 		alignItems: 'stretch',
 		marginBottom: hp('14%'),
 
 	},
 
-	text1:{
-  color:'white',
-  fontSize: hp('2.4%'),
-  
-  
+	text1: {
+		color: 'white',
+		fontSize: hp('2.4%'),
+
+
 	},
-	text2:{
-   color:'#F3A78E',
-   fontSize: hp('2.4%'),
-   
+	text2: {
+		color: '#F3A78E',
+		fontSize: hp('2.4%'),
+
 	},
 
-	buttonVerif:{
-		borderRadius:10,
-		
-		
+	buttonVerif: {
+		borderRadius: 10,
+
+
 	}
 
 
