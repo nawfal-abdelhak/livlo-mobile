@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import HomeScreenn from "./src/screens/HomeScreen";
 import AdminContent from "./src/screens/AdminContent";
 import {UserContentStackScreen,HomeStackScreen} from "./src/screens/HomeUser";
-
+import { ModalPortal } from 'react-native-modals';
 import { UserContext } from './src/contexts/index';
 import  DrawerContent  from './src/screens/DrawerContent';
 // import RootStackScreen from './src/screens/Rootstack';
@@ -18,7 +18,7 @@ import Intro1 from "./src/screens/Intro1";
 import LottieView from 'lottie-react-native';
 import Dragg from "./src/screens/DraggView";
 
-
+import Order from "./src/screens/Order";
 
 import Signin from "./src/screens/Signin";
 import Signup from "./src/screens/Signup";
@@ -33,6 +33,11 @@ const App = () => {
   const [_user, setUser] = useState();
 
   const [isLoading, setloading] = useState(true);
+
+  const [_order, setOrder] = useState({
+    product:[],
+    restaurant:''
+  });
   
 
   useEffect(() => {
@@ -71,8 +76,11 @@ const App = () => {
 
   
   return (
-    <UserContext.Provider value={{ _user: _user, setUser: setUser }}>
+
+    <UserContext.Provider value={{ _user: _user, setUser: setUser,_order:_order,setOrder:setOrder }}>
+      
       <NavigationContainer >
+      
         
           {_user ?
             <>
@@ -83,17 +91,22 @@ const App = () => {
                     </Stack.Navigator>
                   
                   : _user.roles.includes('CLIENT') ?
+                  
+                  
 
                   <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
-                        
+                    
                   <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
                   <Drawer.Screen name="Profile" component={UserContentStackScreen} />
                   <Drawer.Screen name="adresse" component={adresse} />
-                </Drawer.Navigator>
+                  <Stack.Screen name="Order" component={Order} />
+                  </Drawer.Navigator>
+                
+                     
+                     
                     
-                      /* <Stack.Screen name="UserContent" component={UserContent} /> */
                       
-                      
+                     
                     :
                     
                      null
@@ -102,6 +115,7 @@ const App = () => {
             </>
             :
             <Stack.Navigator headerMode='none'>
+              
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen name="Signup" component={Signup} />
               
@@ -121,6 +135,7 @@ const App = () => {
           }
        
       </NavigationContainer>
+      <ModalPortal />
     </UserContext.Provider>
   );
 }

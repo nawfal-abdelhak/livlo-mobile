@@ -58,11 +58,16 @@ const Signin = ({ navigation }) => {
 	const saveUser = () => {
 		console.log(phoneNumber + "sss");
 		// kansift num direct pour test
-		let body = { "phone": "+212602611422" };
-		Springapi.post('Auth/signIn',  body )
+		let body = { "phone": phoneNumber };
+		Springapi.post('Auth/signIn', body,{
+		headers: {
+			'Content-Type': 'application/json',
+			
+		} })
 			.then((response) => {
 
 				console.log(response.data);
+				
 				let user = response.data;
 				AsyncStorage.setItem('user', JSON.stringify(user));
 				setUser(user);
@@ -70,19 +75,9 @@ const Signin = ({ navigation }) => {
 			.catch(function (error) {
 				console.log(error);
 			});
-	// 	console.log("ss")
-  
-	// 	let body = { "username":"client",     
-    // "password":"123456" };
-	// 	Springapi.post('api/auth/signin',  body )
-	// 		.then((response) => {
+			
 
-	// 			console.log(response.data);
-				
-	// 		})
-	// 		.catch(function (error) {
-	// 			console.log(error);
-	// 		});
+	
 	
 	};
 
@@ -158,7 +153,9 @@ const Signin = ({ navigation }) => {
 						/>
 					</View >
 
-					{/* onPress={async () => {
+					
+
+					<TouchableOpacity style={styles.image1} onPress={async () => {
 						// The FirebaseRecaptchaVerifierModal ref implements the
 						// FirebaseAuthApplicationVerifier interface and can be
 						// passed directly to `verifyPhoneNumber`.
@@ -177,9 +174,7 @@ const Signin = ({ navigation }) => {
 						} catch (err) {
 							showMessage({ text: `Error: ${err.message}`, color: 'red' });
 						}
-					}} */}
-
-					<TouchableOpacity style={styles.image1} onPress={() => saveUser()} >
+					}} >
 						<Image source={image1} />
 
 					</TouchableOpacity>
@@ -288,13 +283,8 @@ const Signin = ({ navigation }) => {
 					</View>
 				</ScrollView>
 			</LinearGradient>
-
-
 		}
 	</View>
-
-
-
 
 };
 

@@ -44,7 +44,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
                                 size={50}
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={styles.title}>  nawfal </Title>
+                                <Title style={styles.title}>  {_user.name} </Title>
                                 <Caption style={styles.caption}>060261421</Caption>
                             </View>
                         </View>

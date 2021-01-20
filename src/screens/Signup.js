@@ -5,11 +5,12 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import * as Animatable from 'react-native-animatable';
 import DatePicker from 'react-native-datepicker';
 
+
 import { LinearGradient } from 'expo-linear-gradient';
 const image = require('../../assets/loginPage.png');
 
-
-
+import AsyncStorage from '@react-native-community/async-storage';
+import { UserContext } from '../../src/contexts/index';
 const image1 = require('../../assets/Submit.png');
 
 const { height } = Dimensions.get('window');
@@ -50,6 +51,7 @@ try {
 const CELL_COUNT = 6;
 
 const Signin = () => {
+    const { setUser } = useContext(UserContext);
 
     const [screen, setScreen] = React.useState(true);
 
@@ -82,32 +84,41 @@ const Signin = () => {
 
         full_name: '',
         phone_number: 0,
-        birthday: '01-01-99'
+        birthday: '1999-10-10'
 
     });
 
-    const [test,setTest]=React.useState('')
-
-    const errmessage = {
-        err1: 'required',
-
-    }
+    
 
     const saveUser = (user) => {
         console.log(user)
 
-        Springapi.post('api/auth/signup', {
-            "username": user.full_name,
-            "email": user.phone_number,
+        Springapi.post('Auth/signUp', {
+            "name": user.full_name,
+            "phone": user.phone_number,
             "birthday": user.birthday
-
         })
             .then(function (response) {
-                console.log(response);
+                
             })
             .catch(function (error) {
                 console.log(error);
             });
+            console.log('second')
+
+            let body = { "phone": user.phone_number };
+		Springapi.post('Auth/signIn',  body )
+			.then((response) => {
+
+				console.log(response.data);
+				
+				let user1 = response.data;
+				AsyncStorage.setItem('user', JSON.stringify(user1));
+				setUser(user1);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 
 
 
@@ -205,7 +216,7 @@ const Signin = () => {
                                     // Initial date from state
                                     mode="date" // The enum of date, datetime and time
                                     //   placeholder="select date"
-                                    format="DD-MM-YY"
+                                    format="YYYY-MM-DD"
                                     //   minDate="01-01-2016"
                                     maxDate={new Date()}
                                     date={data.birthday}
@@ -248,8 +259,7 @@ const Signin = () => {
 						// The FirebaseRecaptchaVerifierModal ref implements the
 						// FirebaseAuthApplicationVerifier interface and can be
 						// passed directly to `verifyPhoneNumber`.
-                             console.log(data)
-                             console.log(data.phone_number)
+                            
                           
                              
 
@@ -323,8 +333,7 @@ const Signin = () => {
 						 borderRadius="10"
                             title="Confirm Verification Code"
                             onPress={async () => {
-                                console.log(value)
-                                console.log(verificationId)
+                              
 								try {
 									const credential = firebase.auth.PhoneAuthProvider.credential(
 										verificationId,
@@ -332,6 +341,7 @@ const Signin = () => {
 									);
 									await firebase.auth().signInWithCredential(credential);
                                     showMessage({ text: 'Phone authentication successful 👍' });
+                                    saveUser(data)
                                     
 								} catch (err) {
 									showMessage({ text: `Error: ${err.message}`, color: 'red' });

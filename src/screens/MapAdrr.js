@@ -1,18 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity, Dimensions, TextInput } from "react-native";
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import Springapi from '../../src/api/Springapi';
 import MapView, { Marker } from 'react-native-maps';
-
+import { Modal, ModalContent, SlideAnimation, ModalFooter, ModalButton, } from 'react-native-modals';
+import { UserContext } from '../../src/contexts/index';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const marker_img = require('../../assets/locate1.png');
 
 const MapAdrr = ({ navigation }) => {
-
+  
+  const {  setUser,_user } = useContext(UserContext);
+  const [state, setState] = React.useState({ visible: false });
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [map, setmap] = useState(null);
@@ -20,6 +23,7 @@ const MapAdrr = ({ navigation }) => {
 
   const [actuallat, setActuallat] = useState(null);
   const [actuallong, setActuallongt] = useState(null);
+  const [adressedetail, setAdressedetail] = useState('Rue/residence/num de appartement');
 
   const [display, setdisplay] = useState(true);
 
@@ -40,19 +44,36 @@ const MapAdrr = ({ navigation }) => {
 
   // }
   const saveLocation = () => {
-    // console.log(marker);
-    // console.log("ss");
-    console.log(actuallat);
-    console.log(actuallong);
+    setState({ visible: false })
+    let body = {
+       "latitude": actuallat,
+       "longuitude": actuallong,
+       "adress": adressedetail,
+   };
+    Springapi.put('client/addLocation/'+_user.user.id, body, {
+      headers: {      
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer'+' '+_user.token,
+      }
+    })
+      .then((response) => {
+
+        console.log(response.data);
+
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
 
   const getcameraloc = (region) => {
     console.log("ok")
-    
+
     setActuallat(region.latitude)
     setActuallongt(region.longitude)
-    
+
 
   }
 
@@ -69,17 +90,25 @@ const MapAdrr = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
 
+      // map.animateToCoordinate({
+      //   latitude: location.coords.latitude,
+      //   longitude: location.coords.longitude,
+      // },
+      //   2000
+      // )
+
+      console.log(_user.user.latitude);
       map.animateToCoordinate({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude: _user.user.latitude,
+        longitude: _user.user.longuitude,
       },
         2000
       )
 
-     
 
-      console.log(location);
+
       
+
     })();
 
   }
@@ -100,7 +129,7 @@ const MapAdrr = ({ navigation }) => {
 
         onMapReady={getloc}
         onRegionChangeComplete={getcameraloc}
-        >
+      >
 
         {/* // onPress={(e) => setmarker(e.nativeEvent.coordinate)} */}
         {/* {
@@ -115,31 +144,33 @@ const MapAdrr = ({ navigation }) => {
       </MapView>
 
       <View
-              style={{
-                position: 'absolute',
-                top: '-5%',
-                alignSelf: 'flex-start'
-              }}
-            >
-             
-              <TouchableOpacity  onPress={() => {navigation.goBack(null) }}>
-                        <Icon
-                          name="keyboard-backspace"
-                          color={'black'}
-                          size={45}
-                        />
-                        </TouchableOpacity>
+        style={{
+          position: 'absolute',
+          top: '-5%',
+          alignSelf: 'flex-start'
+        }}
+      >
 
-            </View>
+        <TouchableOpacity onPress={() => { navigation.goBack(null) }}>
+          <Icon
+            name="keyboard-backspace"
+            color={'black'}
+            size={45}
+          />
+        </TouchableOpacity>
+
+      </View>
 
 
-            <View style={{left: '48.3%',
-   
-    position: 'absolute',
-    top: '42%'}}>
-         <Image style={{height:47,width:23}} source={marker_img}/>
-         {/* <Text>ss</Text> */}
-             </View>
+      <View style={{
+        left: '48.3%',
+
+        position: 'absolute',
+        top: '42%'
+      }}>
+        <Image style={{ height: 47, width: 23 }} source={marker_img} />
+        {/* <Text>ss</Text> */}
+      </View>
 
 
 
@@ -167,22 +198,68 @@ const MapAdrr = ({ navigation }) => {
           </View>
           : */}
 
-          
-            <View
-              style={{
-                position: 'absolute',
-                top: '0%',
-                alignSelf: 'flex-end'
+
+      <View
+        style={{
+          position: 'absolute',
+          top: '0%',
+          alignSelf: 'flex-end'
+        }}
+      >
+        <Button title="confirm location" onPress={() => setState({ visible: true })} />
+
+
+
+      </View>
+      
+
+
+      <Modal
+        visible={state.visible}
+        footer={
+          <ModalFooter>
+            <ModalButton
+              text="CANCEL"
+              onPress={() => {
+                setState({ visible: false })
               }}
-            >
-              <Button title="confirm location" onPress={() => saveLocation()} />
+            />
+            <ModalButton
+              text="save location"
+              onPress={() => {
+                saveLocation();
+
+              }}
+            />
+          </ModalFooter>
+        }
+        modalAnimation={new SlideAnimation({
+          slideFrom: 'bottom',
+        })}
+        onTouchOutside={() => {
+          setState({ visible: false });
+        }}
+      >
 
 
-            </View>
-            
-            
 
-  
+        <ModalContent>
+          <View style={{ height: 100, width: 300 }}>
+            <Text>more info about adresse</Text>
+
+            <TextInput
+
+              style={styles.inputnumber}
+
+              value={adressedetail}
+              onChangeText={l => setAdressedetail(l)}
+
+            />
+            <Text style={{ position: "relative", top: '-33%', left: '4%', fontSize: 13.7 }}>{adressedetail}</Text>
+
+          </View>
+        </ModalContent>
+      </Modal>
 
 
     </View>
@@ -207,7 +284,18 @@ const styles = StyleSheet.create({
   },
   marker: {
 
-  }
+  },
+  inputnumber: {
+    marginTop: 20,
+    color: "white",
+    width: '100%',
+    height: '50%',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10
+  },
+
 })
 
 export default MapAdrr;
