@@ -92,7 +92,7 @@ const Order = (props) => {
             </View>
 
 
-            <ScrollView   >
+          
 
                 {/* <FlatList
 
@@ -114,13 +114,13 @@ const Order = (props) => {
                                         { productsdata.quantity ?
                                             <View style={styles.items} >
                                                 <View style={{ flexDirection: 'row' }}>
-                                                    <TouchableOpacity style={{ backgroundColor: '#F3A990', borderRadius: 60,height:hp('5%'), width:wp('10%') }}>
-                                                        <Text style={{ fontSize: hp('2.8%'), marginLeft: '3%', textAlign: 'center' }} > {productsdata.quantity}x  </Text>
+                                                    <TouchableOpacity style={{ backgroundColor: '#F3A990', borderRadius: 50,height:hp('5%'), width:wp('10%'), }}>
+                                                        <Text style={{ fontSize: hp('2.8%'), marginLeft: '3%',marginTop:"4%",alignSelf:"center" }} > {productsdata.quantity}x  </Text>
                                                     </TouchableOpacity>
                                                     <Text style={{ fontSize: hp('2.8%'), marginLeft: '2%',width:wp('45%') }} >{productsdata.name}   </Text>
-                                                    <Text style={{ fontSize: hp('2.8%'), marginLeft: '10%' }}>{productsdata.price}.00 Mad </Text>
+                                                    <Text style={{ fontSize: hp('2.8%'), marginLeft: '10%' ,fontFamily: 'monospace'}}>{productsdata.price}.00 Mad </Text>
                                                 </View>
-                                                <Text style={{ fontSize: hp('2%'), marginLeft: '14%', marginTop: hp('0.2%'),width:wp('45%') }} >{productsdata.description}   </Text>
+                                                <Text style={{ fontSize: hp('2%'), marginLeft: '12%', marginTop: hp('0.2%'),width:wp('45%') ,fontFamily: 'monospace',color:"grey" }} >{productsdata.description}   </Text>
                                                 <Text style={{
                                                     marginBottom: hp('1%'),
                                                     borderBottomColor: '#e6e6e6',
@@ -165,12 +165,15 @@ const Order = (props) => {
                         color={'grey'}
                         size={30}
                     />
-                    <Text style={styles.adresstext}> {_user.user.adresse}</Text>
+                    <Text style={styles.adresstext}> {_user.user.adress}</Text>
+                    <View  style={{ paddingRight:20 }}>
                     <Icon
+                   
                         name="chevron-right"
                         color={'grey'}
                         size={30}
                     />
+                    </View>
                 </TouchableOpacity>
 
                 <View>
@@ -198,7 +201,7 @@ const Order = (props) => {
         
 
 
-            </ScrollView>
+           
             <TouchableOpacity onPress={()=> {saveOrder() }}  style={{
           position: 'absolute',//use absolute position to show button on top of the map
           top: hp('90%'), //for center align
@@ -248,19 +251,21 @@ const styles = StyleSheet.create({
 
     },
     title: {
-        fontSize: hp('3.4%'),
+        fontSize: hp('3.1%'),
         color: 'grey',
         borderBottomColor: '#e6e6e6',
         borderBottomWidth: 2,
         width: '90%',
         alignSelf: 'center',
         paddingBottom: 4,
-        marginBottom: hp('1%')
+        marginBottom: hp('1%'),
+        fontFamily: 'monospace'
 
     },
     adresstext: {
         fontSize: hp('2.7%'),
         color: 'black',
+        width:wp('78%')
 
     }
 

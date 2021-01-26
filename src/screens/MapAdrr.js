@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity, Dimensions, TextInput } from "react-native";
-
+import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity, Dimensions, TextInput,Modal,Alert } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Springapi from '../../src/api/Springapi';
 import MapView, { Marker } from 'react-native-maps';
-import { Modal, ModalContent, SlideAnimation, ModalFooter, ModalButton, } from 'react-native-modals';
+// import { Modal, ModalContent, SlideAnimation, ModalFooter, ModalButton, } from 'react-native-modals';
 import { UserContext } from '../../src/contexts/index';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,8 +14,8 @@ const marker_img = require('../../assets/locate1.png');
 
 const MapAdrr = ({ navigation }) => {
   
-  const {  setUser,_user } = useContext(UserContext);
-  const [state, setState] = React.useState({ visible: false });
+  const {  setUser,_user,setdragg } = useContext(UserContext);
+  const [modalVisible, setModalVisible] = useState(false);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [map, setmap] = useState(null);
@@ -44,7 +44,9 @@ const MapAdrr = ({ navigation }) => {
 
   // }
   const saveLocation = () => {
-    setState({ visible: false })
+    setModalVisible(!modalVisible);
+    AsyncStorage.setItem('dragg', "true");
+    setdragg("true")
     let body = {
        "latitude": actuallat,
        "longuitude": actuallong,
@@ -81,30 +83,37 @@ const MapAdrr = ({ navigation }) => {
 
   const getloc = () => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+      // let { status } = await Location.requestPermissionsAsync();
+      // if (status !== 'granted') {
+      //   setErrorMsg('Permission to access location was denied');
+      //   return;
+      // }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      // let location = await Location.getCurrentPositionAsync({});
+      // setLocation(location);
 
-      // map.animateToCoordinate({
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude,
-      // },
-      //   2000
-      // )
+      // if(_user.user.latitude == null) {
+      //   map.animateToCoordinate({
+      //     latitude: location.coords.latitude,
+      //     longitude: location.coords.longitude,
+      //   },
+      //     2000
+      //   )
+      // }
+      
+        console.log(_user.user.latitude);
+        map.animateToCoordinate({
+          latitude: _user.user.latitude,
+          longitude: _user.user.longuitude,
+        },
+          2000
+        )
+  
+      
 
-      console.log(_user.user.latitude);
-      map.animateToCoordinate({
-        latitude: _user.user.latitude,
-        longitude: _user.user.longuitude,
-      },
-        2000
-      )
+      
 
+     
 
 
       
@@ -206,7 +215,7 @@ const MapAdrr = ({ navigation }) => {
           alignSelf: 'flex-end'
         }}
       >
-        <Button title="confirm location" onPress={() => setState({ visible: true })} />
+        <Button title="confirm location" onPress={() =>  setModalVisible(true)} />
 
 
 
@@ -214,7 +223,7 @@ const MapAdrr = ({ navigation }) => {
       
 
 
-      <Modal
+      {/* <Modal
         visible={state.visible}
         footer={
           <ModalFooter>
@@ -259,7 +268,50 @@ const MapAdrr = ({ navigation }) => {
 
           </View>
         </ModalContent>
+      </Modal> */}
+
+<Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <TextInput style={styles.inputnumber}	 value={adressedetail}
+              onChangeText={l => setAdressedetail(l)}	/>				 
+    
+
+						
+             <View style={styles.buttons}>
+            <TouchableOpacity
+              style={ styles.openButton}
+              onPress={() => {
+                saveLocation();
+                
+              }}
+            >
+              <Text style={styles.textStyle}>confrim</Text>
+              
+            </TouchableOpacity>
+            
+             <TouchableOpacity
+              style={ styles.openButton}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.textStyle}>cancel</Text>
+              
+            </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </Modal>
+
 
 
     </View>
@@ -286,15 +338,58 @@ const styles = StyleSheet.create({
 
   },
   inputnumber: {
-    marginTop: 20,
-    color: "white",
-    width: '100%',
-    height: '50%',
+    width:"100%",
     borderColor: 'black',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    width:"80%",
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#2196F3" ,
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    width:"45%",
+    marginHorizontal:15,
+    marginTop:20
+
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+
+  buttons:{
+    flexDirection:"row",
+    justifyContent:"space-around"
+  }
 
 })
 

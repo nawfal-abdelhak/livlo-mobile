@@ -32,6 +32,10 @@ const Stack = createStackNavigator();
 const App = () => {
   const [_user, setUser] = useState();
 
+  const [intro, setintro] = useState();
+  const [intro1, setintro1] = useState();
+  const [dragg, setdragg] = useState();
+
   const [isLoading, setloading] = useState(true);
 
   const [_order, setOrder] = useState({
@@ -41,8 +45,32 @@ const App = () => {
   
 
   useEffect(() => {
-
+    
+    // AsyncStorage.clear();
     setTimeout(async() => {
+
+
+      AsyncStorage.getItem('intro').then((data) => {
+         
+        setintro(data);
+       
+      });
+
+      AsyncStorage.getItem('intro1').then((data) => {
+         
+        setintro1(data);
+       
+      });
+
+      AsyncStorage.getItem('dragg').then((data) => {
+         
+        setdragg(data);
+       
+      });
+
+
+     
+
       AsyncStorage.getItem('user').then((data) => {
 
         setloading(false);
@@ -77,7 +105,7 @@ const App = () => {
   
   return (
 
-    <UserContext.Provider value={{ _user: _user, setUser: setUser,_order:_order,setOrder:setOrder }}>
+    <UserContext.Provider value={{ _user: _user, setUser: setUser,_order:_order,setOrder:setOrder,setintro:setintro,setintro1:setintro1,setdragg:setdragg }}>
       
       <NavigationContainer >
       
@@ -92,40 +120,45 @@ const App = () => {
                   
                   : _user.roles.includes('CLIENT') ?
                   
-                  
+                   !dragg ?
+                    <Stack.Navigator headerMode='none'>
+                    <Stack.Screen name="Dragg" component={Dragg} />   
+                    </Stack.Navigator>
+                      :
 
                   <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <DrawerContent {...props} />}>
-                    
+                  
                   <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
                   <Drawer.Screen name="Profile" component={UserContentStackScreen} />
                   <Drawer.Screen name="adresse" component={adresse} />
                   <Stack.Screen name="Order" component={Order} />
                   </Drawer.Navigator>
-                
+                  
+                          
+                  : null
+               
+               
+                   
+            
                      
-                     
-                    
-                      
-                     
-                    :
-                    
-                     null
                     
               }
             </>
             :
             <Stack.Navigator headerMode='none'>
-              
+              {!intro ?
+               <Stack.Screen name="Intro" component={Intro} />
+              : !intro1 ?
+               <Stack.Screen name="Intro1" component={Intro1} />                
+                :
+                <>
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen name="Signup" component={Signup} />
               
- 
-            <Stack.Screen name="HomeScreenn" component={HomeScreenn} />
-            <Stack.Screen name="Dragg" component={Dragg} />
-            
-            <Stack.Screen name="Intro" component={Intro} />
-            <Stack.Screen name="Intro1" component={Intro1} />                     
-           
+                </>
+
+            }
+              
             </Stack.Navigator>   
 
             

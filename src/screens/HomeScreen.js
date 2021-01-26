@@ -86,7 +86,7 @@ const HomeScreen = ({ navigation }) => {
 
   ]);
 
-
+  const [quantclear, setquantclear] = useState(0)
   const Mcdo = require('../../assets/Mcdo.png');
   const KFC = require('../../assets/KFC.png');
   const BurgerKing = require('../../assets/BurgerKing.png');
@@ -124,8 +124,22 @@ const HomeScreen = ({ navigation }) => {
 
   const changeRest = (id) => {
   setScreen(false);
+ 
+  if (quantclear!=0) {
+   
+    for (let i = 0; i < filtreddata[0].products.length; i++) {
+
+      filtreddata[0].products[i].quantity=0;
+       
+     }
+  }
+
+  setquantclear(quantclear+1);
+
+  
     switch (id) {
       case 0:
+        
         settotalprice(0)
         setFiltreddata(data.filter(data => data.name == "Mcdo"));
         setOpa(0);

@@ -1,10 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, Fragment ,useContext} from 'react';
 
 import { Button, Text, Image, StyleSheet, View, ScrollView, TouchableOpacity,Dimensions } from "react-native";
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-community/async-storage';
 
+import { UserContext } from '../../src/contexts/index';
 const Intro2 = require('../../assets/Intro2.png');
 
 
@@ -16,6 +18,24 @@ const ratio = win.width/363;
 
 
 const Intro1 = ({ navigation }) => {
+    const { setintro1 } = useContext(UserContext);
+    // useEffect(() => {
+    //     AsyncStorage.setItem('intro1', true);
+    
+    
+    // }, []);
+
+    const goToDragg=()=>{
+        console.log("hello")
+
+        AsyncStorage.setItem('intro1', "true");
+        setintro1("true")
+         
+     }
+
+    
+
+    
 
     return (
         <LinearGradient
@@ -38,7 +58,7 @@ const Intro1 = ({ navigation }) => {
                 color="#F3A78E"
                 borderRadius="10"
                 title="Next"
-
+                onPress={() => goToDragg()}
 
             />
 

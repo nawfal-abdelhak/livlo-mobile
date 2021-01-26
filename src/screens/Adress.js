@@ -27,14 +27,15 @@ const Adress = ({ navigation }) => {
             <View  style={styles.IntroView}>
 
             <Text style={styles.Introtext} > Start by defining a </Text>
-            <Text style={styles.Introtext} >  delivery adress</Text>
+            <Text style={styles.Introtext}  >  delivery adress</Text>
             
 
             </View>
 
            <View style={styles.viewarrow}>
-            <Image style={styles.arrow} source={arrow} />
+            <Image style={styles.arrow} source={arrow}/>
             </View>
+
             
 
         </LinearGradient>

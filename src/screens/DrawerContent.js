@@ -94,8 +94,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
                                 size={size}
                                 />
                             )}
-                            label="Settings"
-                            onPress={() => {props.navigation.navigate('SettingsScreen')}}
+                            label="Commandes"
+                            onPress={() => {props.navigation.navigate('Commandes')}}
                         />
                          <DrawerItem 
                             icon={({color, size}) => (
